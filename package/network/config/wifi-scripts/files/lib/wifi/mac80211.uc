@@ -53,6 +53,12 @@ for (let phy_name, phy in board.wlan) {
 		let rband = radio.bands[band_name];
 		let channel = rband.default_channel ?? "auto";
 
+		if (band_name == "5G" && phy.path == "platform/soc@0/c000000.wifi") {
+			let board_name = trim(readfile("/tmp/sysinfo/board_name") ?? "");
+			if (board_name == "jdcloud,re-cs-02")
+				channel = "149";
+		}
+
 		let width = band.max_width;
 		if (band_name == "2G")
 			width = 20;
