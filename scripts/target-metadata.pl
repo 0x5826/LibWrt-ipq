@@ -182,7 +182,7 @@ EOF
 	print <<EOF;
 choice
 	prompt "Target System"
-	default TARGET_mediatek
+	default TARGET_qualcommax
 	reset if !DEVEL
 	
 EOF
