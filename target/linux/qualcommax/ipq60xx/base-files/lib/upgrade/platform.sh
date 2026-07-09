@@ -97,10 +97,12 @@ platform_do_upgrade() {
 		nand_do_upgrade "$1"
 		;;
 	jdcloud,re-ss-01|\
+	jdcloud,re-ss-01-nowifi|\
 	jdcloud,re-cs-02|\
 	jdcloud,re-cs-07|\
 	link,nn6000-v1|\
 	link,nn6000-v2|\
+	link,nn6000-v2-nowifi|\
 	redmi,ax5-jdcloud)
 		kernelname="0:HLOS"
 		rootfsname="rootfs"

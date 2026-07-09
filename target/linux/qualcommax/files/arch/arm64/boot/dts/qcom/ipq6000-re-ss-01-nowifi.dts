@@ -1,0 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+
+#include "ipq6000-re-ss-01.dts"
+
+/ {
+	model = "JDCloud RE-SS-01-nowifi";
+	compatible = "jdcloud,re-ss-01-nowifi", "jdcloud,re-ss-01", "qcom,ipq6018";
+};
+
+&wifi {
+	status = "disabled";
+};

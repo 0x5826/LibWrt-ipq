@@ -354,6 +354,16 @@ define Device/link_nn6000-v2
 endef
 TARGET_DEVICES += link_nn6000-v2
 
+define Device/link_nn6000-v2-nowifi
+	$(Device/link_nn6000-v2)
+	DEVICE_DTS := ipq6000-nn6000-v2-nowifi
+	DEVICE_MODEL := NN6000 v2-nowifi
+	DEVICE_PACKAGES := -ath11k-firmware-ipq6018 -kmod-ath11k -kmod-ath11k-ahb -kmod-ath11k-pci -hostapd-common -wpad-openssl -kmod-qca-nss-drv-wifi-meshmgr -ipq-wifi-link_nn6000
+	SUPPORTED_DEVICES += link,nn6000-v2
+endef
+TARGET_DEVICES += link_nn6000-v2-nowifi
+
+
 define Device/jdcloud_re-ss-01
 	$(call Device/FitImage)
 	$(call Device/EmmcImage)
@@ -366,6 +376,15 @@ define Device/jdcloud_re-ss-01
 	IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-rootfs | append-metadata
 endef
 TARGET_DEVICES += jdcloud_re-ss-01
+
+define Device/jdcloud_re-ss-01-nowifi
+	$(Device/jdcloud_re-ss-01)
+	DEVICE_DTS := ipq6000-re-ss-01-nowifi
+	DEVICE_MODEL := RE-SS-01-nowifi
+	DEVICE_PACKAGES := -ath11k-firmware-ipq6018 -kmod-ath11k -kmod-ath11k-ahb -kmod-ath11k-pci -hostapd-common -wpad-openssl -kmod-qca-nss-drv-wifi-meshmgr -ipq-wifi-jdcloud_re-ss-01
+	SUPPORTED_DEVICES += jdcloud,re-ss-01
+endef
+TARGET_DEVICES += jdcloud_re-ss-01-nowifi
 
 define Device/jdcloud_re-cs-02
 	$(call Device/FitImage)

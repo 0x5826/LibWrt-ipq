@@ -1,0 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+
+#include "ipq6000-nn6000-v2.dts"
+
+/ {
+	model = "Link NN6000 v2-nowifi";
+	compatible = "link,nn6000-v2-nowifi", "link,nn6000-v2", "qcom,ipq6018";
+};
+
+&wifi {
+	status = "disabled";
+};
