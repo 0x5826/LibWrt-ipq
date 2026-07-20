@@ -386,6 +386,15 @@ define Device/jdcloud_re-ss-01-nowifi
 endef
 TARGET_DEVICES += jdcloud_re-ss-01-nowifi
 
+define Device/jdcloud_re-ss-01-nowifi-rammax
+	$(Device/jdcloud_re-ss-01-nowifi)
+	DEVICE_DTS := ipq6000-re-ss-01-nowifi-rammax
+	DEVICE_MODEL := RE-SS-01-nowifi-rammax
+	SUPPORTED_DEVICES += jdcloud,re-ss-01 jdcloud,re-ss-01-nowifi
+endef
+TARGET_DEVICES += jdcloud_re-ss-01-nowifi-rammax
+
+
 define Device/jdcloud_re-cs-02
 	$(call Device/FitImage)
 	$(call Device/EmmcImage)

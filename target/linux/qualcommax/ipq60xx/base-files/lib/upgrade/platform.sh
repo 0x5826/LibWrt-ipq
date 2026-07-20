@@ -98,6 +98,7 @@ platform_do_upgrade() {
 		;;
 	jdcloud,re-ss-01|\
 	jdcloud,re-ss-01-nowifi|\
+	jdcloud,re-ss-01-nowifi-rammax|\
 	jdcloud,re-cs-02|\
 	jdcloud,re-cs-07|\
 	link,nn6000-v1|\

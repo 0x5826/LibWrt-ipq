@@ -1,0 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+
+#include "ipq6000-re-ss-01-nowifi.dts"
+
+/ {
+	model = "JDCloud RE-SS-01-nowifi-rammax";
+	compatible = "jdcloud,re-ss-01-nowifi-rammax", "jdcloud,re-ss-01-nowifi", "jdcloud,re-ss-01", "qcom,ipq6018";
+};
+
+&q6_region {
+	reg = <0x0 0x4ab00000 0x0 0x400000>;
+};

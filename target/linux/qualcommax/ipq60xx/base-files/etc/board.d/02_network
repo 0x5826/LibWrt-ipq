@@ -38,6 +38,7 @@ ipq60xx_setup_interfaces()
 		;;
 	jdcloud,re-ss-01|\
 	jdcloud,re-ss-01-nowifi|\
+	jdcloud,re-ss-01-nowifi-rammax|\
 	jdcloud,re-cs-07|\
 	anysafe,e1|\
 	cmiot,ax18|\
