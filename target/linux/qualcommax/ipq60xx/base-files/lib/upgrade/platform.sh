@@ -105,12 +105,25 @@ platform_do_upgrade() {
 	link,nn6000-v2|\
 	link,nn6000-v2-nowifi|\
 	redmi,ax5-jdcloud)
-		kernelname="0:HLOS"
-		rootfsname="rootfs"
-		mmc_do_upgrade "$1"
+		CI_KERNPART="0:HLOS"
+		CI_ROOTPART="rootfs"
+		emmc_do_upgrade "$1"
 		;;
 	*)
 		default_do_upgrade "$1"
+		;;
+	esac
+}
+
+platform_copy_config() {
+	case "$(board_name)" in
+	jdcloud,re-ss-01|\
+	jdcloud,re-cs-02|\
+	jdcloud,re-cs-07|\
+	link,nn6000-v1|\
+	link,nn6000-v2|\
+	redmi,ax5-jdcloud)
+		emmc_copy_config
 		;;
 	esac
 }
