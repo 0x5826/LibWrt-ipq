@@ -10,3 +10,7 @@
 &q6_region {
 	reg = <0x0 0x4ab00000 0x0 0x400000>;
 };
+
+&q6v5_wcss {
+	status = "disabled";
+};
