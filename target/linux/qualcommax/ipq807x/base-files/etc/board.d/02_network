@@ -70,9 +70,6 @@ ipq807x_setup_interfaces()
 	qnap,301w)
 		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3 lan4 10g-2" "10g-1"
 		;;
-		tplink,tl-er2260t)
-		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3 lan4 lan5" "lan6"
-		;;
 	tplink,eap620hd-v1|\
 	tplink,eap660hd-v1)
 		ucidef_set_interface_lan "lan" "dhcp"
@@ -126,6 +123,11 @@ ipq807x_setup_macs()
 	verizon,cr1000a)
 		wan_mac=$(mmc_get_mac_ascii 0:APPSBLENV baseMAC)
 		lan_mac=$(macaddr_add "$wan_mac" 1)
+		label_mac=$wan_mac
+		;;
+	inseego,fg2000)
+		wan_mac=$(mtd_get_mac_text 0:art 0 12)
+		lan_mac=$(macaddr_add $wan_mac 1)
 		label_mac=$wan_mac
 		;;
 	esac

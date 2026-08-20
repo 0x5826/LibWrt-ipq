@@ -21,6 +21,8 @@
 	
 	aliases {
 		serial0 = &blsp1_uart5;
+		sdhc1 = &sdhc_1;
+		/* Aliases as required by u-boot to patch MAC addresses */
 		ethernet0 = &dp1;
 		ethernet1 = &dp2;
 		ethernet2 = &dp3;
@@ -32,6 +34,7 @@
 	
 	chosen {
 		stdout-path = "serial0:115200n8";
+		bootargs-append = " swiotlb=1 coherent_pool=2M";
 	};
 	
 	keys {
@@ -328,11 +331,21 @@
 	status = "okay";
 	switch_lan_bmp = <(ESS_PORT4 | ESS_PORT5 | ESS_PORT6)>;
 	switch_wan_bmp = <ESS_PORT3>;
-	switch_mac_mode = <0>;
-	switch_mac_mode1 = <255>;
-	switch_mac_mode2 = <13>;
+	switch_mac_mode = <MAC_MODE_PSGMII>;
+	switch_mac_mode1 = <MAC_MODE_DISABLED>;
+	switch_mac_mode2 = <MAC_MODE_USXGMII>;
 	
 	qcom,port_phyinfo {
+		port@1 {
+			port_id = <1>;
+			phy_address = <0>;
+		};
+
+		port@2 {
+			port_id = <2>;
+			phy_address = <1>;
+		};
+		
 		port@3 {
 			port_id = <3>;
 			phy_address = <2>;
@@ -342,12 +355,11 @@
 			port_id = <4>;
 			phy_address = <3>;
 		};
-		
 		port@5 {
 			port_id = <5>;
 			phy_address = <4>;
 		};
-		
+
 		port@6 {
 			port_id = <6>;
 			phy_address = <7>;

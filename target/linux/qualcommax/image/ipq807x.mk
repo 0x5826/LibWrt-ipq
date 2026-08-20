@@ -431,19 +431,6 @@ define Device/tplink_deco-x80-5g
 endef
 TARGET_DEVICES += tplink_deco-x80-5g
 
-define Device/tplink_tl-er2260t
-	$(call Device/FitImage)
-	$(call Device/UbiFit)
-	DEVICE_VENDOR := TP-Link
-	DEVICE_MODEL := TL-ER2260T
-	BLOCKSIZE := 128k
-	PAGESIZE := 2048
-	DEVICE_DTS_CONFIG := config@hk07
-	SOC := ipq8070
-	DEVICE_PACKAGES := kmod-usb-ledtrig-usbport qca-ssdk-shell
-endef
-TARGET_DEVICES += tplink_tl-er2260t
-
 define Device/tplink_eap620hd-v1
 	$(call Device/FitImage)
 	$(call Device/UbiFit)
