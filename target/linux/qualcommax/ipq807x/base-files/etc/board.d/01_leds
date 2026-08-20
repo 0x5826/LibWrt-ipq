@@ -33,6 +33,13 @@ spectrum,sax1v1k)
 	ucidef_set_led_netdev "wan-port-link-green" "WAN-PORT-LINK-GREEN" "90000.mdio-1:1c:green:wan" "wan" "link_2500"
 	ucidef_set_led_netdev "wan-port-link-yellow" "WAN-PORT-LINK-YELLOW" "90000.mdio-1:1c:yellow:wan" "wan" "tx rx link_10 link_100 link_1000"
 	;;
+tplink,tl-er2260t)
+	ucidef_set_led_usbdev "usb" "USB" "green:usb" "1-1"
+	ucidef_set_led_netdev "sfp1-link" "SFP1 (Link)" "green:sfp1-10g" "lan5" "link"
+	ucidef_set_led_netdev "sfp2-link" "SFP2 (Link)" "green:sfp2-10g" "lan6" "link"
+	ucidef_set_led_netdev "sfp1-activity" "SFP1 (Activity)" "green:sfp1-act" "lan5" "tx rx"
+	ucidef_set_led_netdev "sfp2-activity" "SFP2 (Activity)" "green:sfp2-act" "lan6" "tx rx"
+	;;
 netgear,rax120v2)
 	ucidef_set_led_netdev "aqr" "AQR" "white:aqr" "lan5"
 	;;
