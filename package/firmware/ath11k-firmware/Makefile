@@ -14,7 +14,7 @@ PKG_MIRROR_HASH:=4d37ebfec65fd5d1585c38bd6925fbc46bb6ad2a7eacc5ea93685f2873c1f29
 PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL:=https://github.com/VIKINGYFY/ath11k-firmware-ddwrt.git
+PKG_SOURCE_URL:=https://github.com/laipeng668/ath11k-firmware-ddwrt.git
 
 PKG_LICENSE_FILES:=LICENSE.qca_firmware
 
