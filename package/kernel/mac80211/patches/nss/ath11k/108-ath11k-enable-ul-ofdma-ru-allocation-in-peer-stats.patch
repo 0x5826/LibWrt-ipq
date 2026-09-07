@@ -191,7 +191,7 @@
  
  }
  
-@@ -5437,6 +5553,55 @@ static void ath11k_dp_rx_mon_dest_proces
+@@ -5460,6 +5576,55 @@ static void ath11k_dp_rx_mon_dest_proces
  	}
  }
  
@@ -247,7 +247,7 @@
  int ath11k_dp_rx_process_mon_status(struct ath11k_base *ab, int mac_id,
  				    struct napi_struct *napi, int budget)
  {
-@@ -5513,8 +5678,13 @@ int ath11k_dp_rx_process_mon_status(stru
+@@ -5536,8 +5701,13 @@ int ath11k_dp_rx_process_mon_status(stru
  
  		if ((ppdu_info->fc_valid) &&
  		    (ppdu_info->ast_index != HAL_AST_IDX_INVALID)) {
