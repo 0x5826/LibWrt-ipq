@@ -20,6 +20,7 @@ endef
 define Package/ecmtop/description
   ecmtop is an interactive TUI network traffic monitor for Qualcomm NSS ECM
   hardware-accelerated flows, providing real-time WAN throughput and per-client speed rankings.
+  Written in pure C99 with zero dynamic memory allocation.
 endef
 
 define Build/Prepare
@@ -27,21 +28,10 @@ define Build/Prepare
 	$(CP) ./src/* $(PKG_BUILD_DIR)/
 endef
 
-ifeq ($(ARCH),aarch64)
-  GO_ARCH:=arm64
-else ifeq ($(ARCH),x86_64)
-  GO_ARCH:=amd64
-else
-  GO_ARCH:=$(ARCH)
-endif
-
 define Build/Compile
-	( cd $(PKG_BUILD_DIR) && \
-		GOOS=linux \
-		GOARCH=$(GO_ARCH) \
-		CGO_ENABLED=0 \
-		go build -trimpath -ldflags "-s -w" -o $(PKG_BUILD_DIR)/ecmtop . \
-	)
+	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_CPPFLAGS) $(TARGET_LDFLAGS) \
+		-std=c99 -Wall -Wextra -O2 \
+		-o $(PKG_BUILD_DIR)/ecmtop $(PKG_BUILD_DIR)/main.c -lm
 endef
 
 define Package/ecmtop/install
