@@ -65,6 +65,8 @@ for (let phy_name, phy in board.wlan) {
 		let width = band.max_width;
 		if (band_name == "2G")
 			width = 20;
+		else if (board_name == "jdcloud,re-cs-02" && band_name == "5G" && phy.path != "platform/soc@0/c000000.wifi" && width >= 160)
+			width = 160;
 		else if (width > 80)
 			width = 80;
 
