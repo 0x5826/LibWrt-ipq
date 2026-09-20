@@ -55,11 +55,15 @@ for (let phy_name, phy in board.wlan) {
 		let rband = radio.bands[band_name];
 		let channel = rband.default_channel ?? "auto";
 
-		if (board_name == "jdcloud,re-cs-02" && band_name == "5G") {
-			if (phy.path == "platform/soc@0/c000000.wifi")
-				channel = "149";
-			else
-				channel = "36";
+		if (board_name == "jdcloud,re-cs-02") {
+			if (band_name == "5G") {
+				if (phy.path == "platform/soc@0/c000000.wifi")
+					channel = "149";
+				else
+					channel = "36";
+			} else if (band_name == "2G") {
+				channel = "auto";
+			}
 		}
 
 		let width = band.max_width;
@@ -104,15 +108,13 @@ for (let phy_name, phy in board.wlan) {
 			num_global_macaddr = board.wlan.defaults.ssids?.[band_name]?.mac_count;
 		}
 
-		if (board_name == "jdcloud,re-cs-02") {
-			if (phy.path == "platform/soc@0/c000000.wifi")
-				country = "CN";
-			else
-				country = "";
-		}
+		if (board_name == "jdcloud,re-cs-02")
+			country = "";
 
 		if (length(info.radios) > 0)
 			id += `\nset ${s}.radio='${radio.index}'`;
+
+		let country_opt = country ? `set ${s}.country='${country}'\n` : "";
 
 		print(`set ${s}=wifi-device
 set ${s}.type='mac80211'
@@ -120,8 +122,7 @@ set ${s}.${id}
 set ${s}.band='${band_name}'
 set ${s}.channel='${channel}'
 set ${s}.htmode='${htmode}'
-set ${s}.country='${country || ''}'
-set ${s}.num_global_macaddr='${num_global_macaddr || ''}'
+${country_opt}set ${s}.num_global_macaddr='${num_global_macaddr || ''}'
 
 set ${si}=wifi-iface
 set ${si}.device='${name}'
