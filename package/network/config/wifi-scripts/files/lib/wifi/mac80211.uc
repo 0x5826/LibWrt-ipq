@@ -109,7 +109,7 @@ for (let phy_name, phy in board.wlan) {
 		}
 
 		if (board_name == "jdcloud,re-cs-02")
-			country = "";
+			country = "US";
 
 		if (length(info.radios) > 0)
 			id += `\nset ${s}.radio='${radio.index}'`;
