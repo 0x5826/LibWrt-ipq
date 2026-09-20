@@ -9,6 +9,8 @@ let board = json(readfile("/etc/board.json"));
 if (!board.wlan)
 	exit(0);
 
+let board_name = board.model?.id ?? trim(readfile("/tmp/sysinfo/board_name") ?? "");
+
 let idx = 0;
 let commit;
 
@@ -53,10 +55,11 @@ for (let phy_name, phy in board.wlan) {
 		let rband = radio.bands[band_name];
 		let channel = rband.default_channel ?? "auto";
 
-		if (band_name == "5G" && phy.path == "platform/soc@0/c000000.wifi") {
-			let board_name = trim(readfile("/tmp/sysinfo/board_name") ?? "");
-			if (board_name == "jdcloud,re-cs-02")
+		if (board_name == "jdcloud,re-cs-02" && band_name == "5G") {
+			if (phy.path == "platform/soc@0/c000000.wifi")
 				channel = "149";
+			else
+				channel = "36";
 		}
 
 		let width = band.max_width;
@@ -98,6 +101,9 @@ for (let phy_name, phy in board.wlan) {
 				defaults = null;
 			num_global_macaddr = board.wlan.defaults.ssids?.[band_name]?.mac_count;
 		}
+
+		if (board_name == "jdcloud,re-cs-02")
+			country = "CN";
 
 		if (length(info.radios) > 0)
 			id += `\nset ${s}.radio='${radio.index}'`;
