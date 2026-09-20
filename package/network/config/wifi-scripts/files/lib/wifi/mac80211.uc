@@ -104,8 +104,12 @@ for (let phy_name, phy in board.wlan) {
 			num_global_macaddr = board.wlan.defaults.ssids?.[band_name]?.mac_count;
 		}
 
-		if (board_name == "jdcloud,re-cs-02")
-			country = "CN";
+		if (board_name == "jdcloud,re-cs-02") {
+			if (phy.path == "platform/soc@0/c000000.wifi")
+				country = "CN";
+			else
+				country = "";
+		}
 
 		if (length(info.radios) > 0)
 			id += `\nset ${s}.radio='${radio.index}'`;
@@ -116,7 +120,7 @@ set ${s}.${id}
 set ${s}.band='${band_name}'
 set ${s}.channel='${channel}'
 set ${s}.htmode='${htmode}'
-set ${s}.country='${country || "CN"}'
+set ${s}.country='${country || ''}'
 set ${s}.num_global_macaddr='${num_global_macaddr || ''}'
 
 set ${si}=wifi-iface
