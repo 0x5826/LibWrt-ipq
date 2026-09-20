@@ -111,6 +111,8 @@ struct client_total {
     char ipv6[48];
     uint64_t total_down;
     uint64_t total_up;
+    double smoothed_down_speed;
+    double smoothed_up_speed;
     bool in_use;
 };
 static struct client_total g_client_totals[MAX_CLIENTS] = {0};
@@ -643,9 +645,61 @@ static void collect_stats(double actual_interval) {
         }
     }
 
-    /* 精确计算瞬时速率 */
-    g_wan.down_speed = (double)wan_delta_down / actual_interval;
-    g_wan.up_speed = (double)wan_delta_up / actual_interval;
+    /* 1. 对客户端流速应用 EMA (alpha=0.7) 平滑滤波，消除 NSS 异步刷新毛刺 */
+    for (int c = 0; c < g_clients_count; c++) {
+        struct client_stat *cs = &g_clients[c];
+        char client_key[64];
+        if (cs->mac[0] && strlen(cs->mac) == 17 && strcmp(cs->mac, "N/A") != 0) {
+            strncpy(client_key, cs->mac, sizeof(client_key) - 1);
+        } else {
+            strncpy(client_key, cs->full_ip, sizeof(client_key) - 1);
+        }
+        struct client_total *tot = get_client_total(client_key, cs->mac, cs->full_ip);
+        if (tot) {
+            double raw_down = cs->down_speed;
+            double raw_up = cs->up_speed;
+
+            if (tot->smoothed_down_speed <= 0.0) {
+                tot->smoothed_down_speed = raw_down;
+            } else if (raw_down <= 10.0) {
+                tot->smoothed_down_speed = 0.0;
+            } else {
+                tot->smoothed_down_speed = 0.7 * raw_down + 0.3 * tot->smoothed_down_speed;
+            }
+
+            if (tot->smoothed_up_speed <= 0.0) {
+                tot->smoothed_up_speed = raw_up;
+            } else if (raw_up <= 10.0) {
+                tot->smoothed_up_speed = 0.0;
+            } else {
+                tot->smoothed_up_speed = 0.7 * raw_up + 0.3 * tot->smoothed_up_speed;
+            }
+
+            cs->down_speed = tot->smoothed_down_speed;
+            cs->up_speed = tot->smoothed_up_speed;
+        }
+    }
+
+    /* 2. 对 WAN 吞吐应用 EMA 平滑滤波 */
+    double raw_wan_down = (double)wan_delta_down / actual_interval;
+    double raw_wan_up = (double)wan_delta_up / actual_interval;
+
+    if (g_wan.down_speed <= 0.0) {
+        g_wan.down_speed = raw_wan_down;
+    } else if (raw_wan_down <= 10.0) {
+        g_wan.down_speed = 0.0;
+    } else {
+        g_wan.down_speed = 0.7 * raw_wan_down + 0.3 * g_wan.down_speed;
+    }
+
+    if (g_wan.up_speed <= 0.0) {
+        g_wan.up_speed = raw_wan_up;
+    } else if (raw_wan_up <= 10.0) {
+        g_wan.up_speed = 0.0;
+    } else {
+        g_wan.up_speed = 0.7 * raw_wan_up + 0.3 * g_wan.up_speed;
+    }
+
     g_wan.total_down += wan_delta_down;
     g_wan.total_up += wan_delta_up;
     g_wan.active_flows = active_flows;
@@ -953,8 +1007,7 @@ int main(int argc, char *argv[]) {
                     render_tui(interval, limit);
                 } else if (ch == 'r' || ch == 'R') {
                     memset(g_client_totals, 0, sizeof(g_client_totals));
-                    g_wan.total_down = 0;
-                    g_wan.total_up = 0;
+                    memset(&g_wan, 0, sizeof(g_wan));
                     render_tui(interval, limit);
                 } else if (ch == ' ') {
                     g_paused = !g_paused;
