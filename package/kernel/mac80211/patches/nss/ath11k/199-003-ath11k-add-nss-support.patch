@@ -132,8 +132,8 @@ Signed-off-by: Sriram R <srirrama@codeaurora.org>
  	ath11k_core_pdev_suspend_target(ab);
  	ath11k_hif_irq_disable(ab);
  	ath11k_dp_pdev_free(ab);
-@@ -2366,6 +2384,10 @@ static int ath11k_core_reconfigure_on_cr
- 	int ret;
+@@ -2368,6 +2386,10 @@ static int ath11k_core_reconfigure_on_cr
+ 	ath11k_hif_irq_disable(ab);
  
  	mutex_lock(&ab->core_lock);
 +
@@ -143,7 +143,7 @@ Signed-off-by: Sriram R <srirrama@codeaurora.org>
  	ath11k_thermal_unregister(ab);
  	ath11k_dp_pdev_free(ab);
  	ath11k_spectral_deinit(ab);
-@@ -2700,6 +2722,10 @@ int ath11k_core_pre_init(struct ath11k_b
+@@ -2702,6 +2724,10 @@ int ath11k_core_pre_init(struct ath11k_b
  		ath11k_err(ab, "failed to pre init firmware: %d", ret);
  		return ret;
  	}
@@ -302,7 +302,7 @@ Signed-off-by: Sriram R <srirrama@codeaurora.org>
  
 --- a/drivers/net/wireless/ath/ath11k/dp.h
 +++ b/drivers/net/wireless/ath/ath11k/dp.h
-@@ -195,6 +195,7 @@ struct ath11k_pdev_dp {
+@@ -197,6 +197,7 @@ struct ath11k_pdev_dp {
  #define DP_AVG_MSDUS_PER_MPDU 4
  
  #define DP_RX_HASH_ENABLE	1 /* Enable hash based Rx steering */
@@ -312,7 +312,7 @@ Signed-off-by: Sriram R <srirrama@codeaurora.org>
  
 --- a/drivers/net/wireless/ath/ath11k/dp_rx.c
 +++ b/drivers/net/wireless/ath/ath11k/dp_rx.c
-@@ -18,6 +18,7 @@
+@@ -20,6 +20,7 @@
  #include "hal_rx.h"
  #include "dp_tx.h"
  #include "peer.h"
@@ -320,7 +320,7 @@ Signed-off-by: Sriram R <srirrama@codeaurora.org>
  
  #define ATH11K_DP_RX_FRAGMENT_TIMEOUT_MS (2 * HZ)
  
-@@ -214,8 +215,8 @@ static inline u8 ath11k_dp_rx_h_mpdu_sta
+@@ -216,8 +217,8 @@ static inline u8 ath11k_dp_rx_h_mpdu_sta
  	return ab->hw_params.hw_ops->rx_desc_get_mpdu_tid(desc);
  }
  
@@ -331,7 +331,7 @@ Signed-off-by: Sriram R <srirrama@codeaurora.org>
  {
  	return ab->hw_params.hw_ops->rx_desc_get_mpdu_peer_id(desc);
  }
-@@ -226,8 +227,8 @@ static inline u8 ath11k_dp_rx_h_msdu_end
+@@ -228,8 +229,8 @@ static inline u8 ath11k_dp_rx_h_msdu_end
  	return ab->hw_params.hw_ops->rx_desc_get_l3_pad_bytes(desc);
  }
  
@@ -342,7 +342,7 @@ Signed-off-by: Sriram R <srirrama@codeaurora.org>
  {
  	return ab->hw_params.hw_ops->rx_desc_get_first_msdu(desc);
  }
-@@ -284,7 +285,7 @@ static inline void ath11k_dp_rxdesc_set_
+@@ -286,7 +287,7 @@ static inline void ath11k_dp_rxdesc_set_
  	ab->hw_params.hw_ops->rx_desc_set_msdu_len(desc, len);
  }
  
@@ -351,7 +351,7 @@ Signed-off-by: Sriram R <srirrama@codeaurora.org>
  					struct hal_rx_desc *desc)
  {
  	struct rx_attention *attn = ath11k_dp_rx_get_attention(ab, desc);
-@@ -499,7 +500,9 @@ static int ath11k_dp_rxdma_pdev_buf_setu
+@@ -532,7 +533,9 @@ static int ath11k_dp_rxdma_pdev_buf_setu
  	struct dp_rxdma_ring *rx_ring = &dp->rx_refill_buf_ring;
  	int i;
  
@@ -362,7 +362,7 @@ Signed-off-by: Sriram R <srirrama@codeaurora.org>
  
  	if (ar->ab->hw_params.rxdma1_enable) {
  		rx_ring = &dp->rxdma_mon_buf_ring;
-@@ -2052,7 +2055,7 @@ int ath11k_dp_rx_crypto_mic_len(struct a
+@@ -2085,7 +2088,7 @@ int ath11k_dp_rx_crypto_mic_len(struct a
  	return 0;
  }
  
@@ -371,7 +371,7 @@ Signed-off-by: Sriram R <srirrama@codeaurora.org>
  					 enum hal_encrypt_type enctype)
  {
  	switch (enctype) {
-@@ -2080,7 +2083,7 @@ static int ath11k_dp_rx_crypto_param_len
+@@ -2113,7 +2116,7 @@ static int ath11k_dp_rx_crypto_param_len
  	return 0;
  }
  
@@ -380,7 +380,7 @@ Signed-off-by: Sriram R <srirrama@codeaurora.org>
  				       enum hal_encrypt_type enctype)
  {
  	switch (enctype) {
-@@ -2815,6 +2818,22 @@ static void ath11k_dp_rx_process_receive
+@@ -2848,6 +2851,22 @@ static void ath11k_dp_rx_process_receive
  	}
  }
  
@@ -403,7 +403,7 @@ Signed-off-by: Sriram R <srirrama@codeaurora.org>
  int ath11k_dp_process_rx(struct ath11k_base *ab, int ring_id,
  			 struct napi_struct *napi, int budget)
  {
-@@ -3114,7 +3133,8 @@ static void ath11k_dp_rx_update_user_sta
+@@ -3147,7 +3166,8 @@ static void ath11k_dp_rx_update_user_sta
  	peer = ath11k_peer_find_by_ast(ar->ab, user_stats->ast_index);
  
  	if (peer == NULL) {
@@ -413,7 +413,7 @@ Signed-off-by: Sriram R <srirrama@codeaurora.org>
  			    user_stats->ast_index);
  		return;
  	}
-@@ -3122,6 +3142,13 @@ static void ath11k_dp_rx_update_user_sta
+@@ -3155,6 +3175,13 @@ static void ath11k_dp_rx_update_user_sta
  	arsta = (struct ath11k_sta *)peer->sta->drv_priv;
  	rx_stats = arsta->rx_stats;
  
@@ -427,7 +427,7 @@ Signed-off-by: Sriram R <srirrama@codeaurora.org>
  	if (!rx_stats)
  		return;
  
-@@ -3198,8 +3225,10 @@ static void ath11k_dp_rx_update_peer_mu_
+@@ -3231,8 +3258,10 @@ static void ath11k_dp_rx_update_peer_mu_
  {
  	u32 num_users, i;
  
@@ -439,7 +439,7 @@ Signed-off-by: Sriram R <srirrama@codeaurora.org>
  
  	num_users = ppdu_info->num_users;
  	if (num_users > HAL_MAX_UL_MU_USERS)
-@@ -5693,7 +5722,7 @@ int ath11k_dp_rx_process_mon_status(stru
+@@ -5726,7 +5755,7 @@ int ath11k_dp_rx_process_mon_status(stru
  	struct sk_buff *skb;
  	struct sk_buff_head skb_list;
  	struct ath11k_peer *peer;
@@ -448,7 +448,7 @@ Signed-off-by: Sriram R <srirrama@codeaurora.org>
  	int num_buffs_reaped = 0;
  	u32 rx_buf_sz;
  	u16 log_type;
-@@ -5764,6 +5793,7 @@ int ath11k_dp_rx_process_mon_status(stru
+@@ -5797,6 +5826,7 @@ int ath11k_dp_rx_process_mon_status(stru
  			if (ppdu_info->reception_type == HAL_RX_RECEPTION_TYPE_SU) {
  				arsta = (struct ath11k_sta *)peer->sta->drv_priv;
  				ath11k_dp_rx_update_peer_su_stats(arsta, ppdu_info);
