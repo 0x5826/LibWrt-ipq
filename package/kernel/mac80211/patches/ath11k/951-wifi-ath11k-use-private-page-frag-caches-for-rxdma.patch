@@ -149,7 +149,7 @@ Signed-off-by: Mark Ruvald Pedersen <wabsie@gmail.com>
  	return 0;
  }
  
-@@ -2837,15 +2870,15 @@ static struct sk_buff *ath11k_dp_rx_allo
+@@ -2865,15 +2898,15 @@ static struct sk_buff *ath11k_dp_rx_allo
  	struct sk_buff *skb;
  	dma_addr_t paddr;
  
