@@ -265,7 +265,7 @@ Signed-off-by: P Praneesh <ppranees@codeaurora.org>
  	rx_attention = ath11k_dp_rx_get_attention(ar->ab, rx_desc);
  	err_bitmap = ath11k_dp_rx_h_attn_mpdu_err(rx_attention);
  	if (enctype != HAL_ENCRYPT_TYPE_OPEN && !err_bitmap)
-@@ -2753,7 +2835,8 @@ static void ath11k_dp_rx_deliver_msdu(st
+@@ -2776,7 +2858,8 @@ static bool ath11k_dp_rx_check_nwifi_hdr
  static int ath11k_dp_rx_process_msdu(struct ath11k *ar,
  				     struct sk_buff *msdu,
  				     struct sk_buff_head *msdu_list,
@@ -275,8 +275,8 @@ Signed-off-by: P Praneesh <ppranees@codeaurora.org>
  {
  	struct ath11k_base *ab = ar->ab;
  	struct hal_rx_desc *rx_desc, *lrx_desc;
-@@ -2820,8 +2903,13 @@ static int ath11k_dp_rx_process_msdu(str
- 		}
+@@ -2848,8 +2931,13 @@ static int ath11k_dp_rx_process_msdu(str
+ 		goto free_out;
  	}
  
 +	ath11k_dp_rx_h_mpdu(ar, msdu, rx_desc, rx_status, fast_rx);
@@ -290,7 +290,7 @@ Signed-off-by: P Praneesh <ppranees@codeaurora.org>
  
  	rx_status->flag |= RX_FLAG_SKIP_MONITOR | RX_FLAG_DUP_VALIDATED;
  
-@@ -2836,10 +2924,12 @@ static void ath11k_dp_rx_process_receive
+@@ -2864,10 +2952,12 @@ static void ath11k_dp_rx_process_receive
  						  struct sk_buff_head *msdu_list,
  						  int mac_id)
  {
@@ -303,7 +303,7 @@ Signed-off-by: P Praneesh <ppranees@codeaurora.org>
  
  	if (skb_queue_empty(msdu_list))
  		return;
-@@ -2856,7 +2946,12 @@ static void ath11k_dp_rx_process_receive
+@@ -2884,7 +2974,12 @@ static void ath11k_dp_rx_process_receive
  	}
  
  	while ((msdu = __skb_dequeue(msdu_list))) {
@@ -317,7 +317,7 @@ Signed-off-by: P Praneesh <ppranees@codeaurora.org>
  		if (unlikely(ret)) {
  			ath11k_dbg(ab, ATH11K_DBG_DATA,
  				   "Unable to process msdu %d", ret);
-@@ -2864,7 +2959,10 @@ static void ath11k_dp_rx_process_receive
+@@ -2892,7 +2987,10 @@ static void ath11k_dp_rx_process_receive
  			continue;
  		}
  
@@ -329,7 +329,7 @@ Signed-off-by: P Praneesh <ppranees@codeaurora.org>
  	}
  }
  
-@@ -2873,11 +2971,12 @@ void ath11k_dp_rx_from_nss(struct ath11k
+@@ -2901,11 +2999,12 @@ void ath11k_dp_rx_from_nss(struct ath11k
  {
  	struct ieee80211_rx_status rx_status = {0};
  	struct ath11k_skb_rxcb *rxcb;
@@ -343,7 +343,7 @@ Signed-off-by: P Praneesh <ppranees@codeaurora.org>
  
  	rx_status.flag |= RX_FLAG_SKIP_MONITOR | RX_FLAG_DUP_VALIDATED;
  
-@@ -4411,6 +4510,7 @@ static int ath11k_dp_rx_h_null_q_desc(st
+@@ -4445,6 +4544,7 @@ static int ath11k_dp_rx_h_null_q_desc(st
  				      struct ieee80211_rx_status *status,
  				      struct sk_buff_head *msdu_list)
  {
@@ -351,8 +351,8 @@ Signed-off-by: P Praneesh <ppranees@codeaurora.org>
  	u16 msdu_len;
  	struct hal_rx_desc *desc = (struct hal_rx_desc *)msdu->data;
  	struct rx_attention *rx_attention;
-@@ -4460,7 +4560,8 @@ static int ath11k_dp_rx_h_null_q_desc(st
- 	}
+@@ -4498,7 +4598,8 @@ static int ath11k_dp_rx_h_null_q_desc(st
+ 
  	ath11k_dp_rx_h_ppdu(ar, desc, status);
  
 -	ath11k_dp_rx_h_mpdu(ar, msdu, desc, status);
@@ -449,7 +449,7 @@ Signed-off-by: P Praneesh <ppranees@codeaurora.org>
  	bool (*rx_desc_get_mpdu_fc_valid)(struct hal_rx_desc *desc);
 --- a/drivers/net/wireless/ath/ath11k/mac.c
 +++ b/drivers/net/wireless/ath/ath11k/mac.c
-@@ -10461,6 +10461,14 @@ static int ath11k_mac_op_sta_state(struc
+@@ -10478,6 +10478,14 @@ static int ath11k_mac_op_sta_state(struc
  		}
  	} else if (old_state == IEEE80211_STA_AUTHORIZED &&
  		   new_state == IEEE80211_STA_ASSOC) {
